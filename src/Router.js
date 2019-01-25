@@ -3,7 +3,7 @@ import {Switch, Route} from 'react-router-dom';
 
 import Home from './Components/Home/Home';
 import NotFound from './404';
-import Login from './Components/Login/Login';
+import Login from './Components/Auth/Login';
 
 const Router = () => (
 	<Switch>
