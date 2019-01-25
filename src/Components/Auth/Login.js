@@ -19,7 +19,8 @@ class LoginForm extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				login(values, this.props.history);
+				console.log('Received values of form: ', values);
+				//login(values, this.props.history);
 			}
 		});
 	}
@@ -29,7 +30,7 @@ class LoginForm extends Component {
 		return (
 			<div className='login-envelop'>
 				<div>
-					<img src='favicon.ico' alt='logo' />
+					<img src='https://www.prosamexico.mx/images/logo.png' alt='PROSA logo' />
 				</div>
 				<div>
 					<Form onSubmit={this.handleSubmit} className='form-envelop'>
@@ -42,8 +43,8 @@ class LoginForm extends Component {
                 rules: [{ required: true, message: 'Type your username!' }],
               })(
                 <Input
-                  prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                  placeholder="Username"/>
+                  prefix={<Icon type='user' style={{ color: 'rgba(0,0,0,.25)' }} />}
+                  placeholder='Username'/>
               )}
             </FormItem>
 						<FormItem>
@@ -64,11 +65,11 @@ class LoginForm extends Component {
               })(
                 <Checkbox>Remember me</Checkbox>
 								)}
-								<Link className="login-form-forgot" to='/forgot'>Forgot password</Link>
-							<Button type="primary" htmlType="submit" className="login-form-button">
+								<Link className='login-form-forgot' to='/forgot'>Forgot password</Link>
+							<Button type='primary' htmlType='submit' className='login-form-button'>
 								Login
 							</Button>
-							Or <Link to='/register'>register now!</Link>
+							Or <Link to='/signup'>register now!</Link>
             </FormItem>
 					</Form>
 				</div>
