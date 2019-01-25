@@ -11,7 +11,8 @@
   margin: 0 auto;
 }
 
-.login-envelop{
+.login-envelop,
+.signup-envelop{
   padding: 10%;
 }
 
@@ -20,6 +21,7 @@
   margin: 0 auto;
 }
 
-.login-form-button {
+.login-form-button,
+.signup-form-button{
   width: 100%;
 }
