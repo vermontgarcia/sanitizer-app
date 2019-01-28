@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 
-import {signup, login} from '../../authService';
+import {signup} from '../../authService';
 
 import {
 	Form,
@@ -36,7 +36,7 @@ class SignupForm extends Component {
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
 				console.log('Received values of form: ', values);
-				//login(values, this.props.history);
+				//signup(values, this.props.history);
 			}
 		});
 	}
@@ -64,7 +64,7 @@ class SignupForm extends Component {
 	}
 	
 	validateCheckedAgreement = (rule, value, callback) => {
-		const form = this.props.form;
+		//const form = this.props.form;
 		if(value === false){
 			callback('Please confirm the agreement!');
 		}
@@ -73,7 +73,10 @@ class SignupForm extends Component {
 
 	render(){
 		const {
-			getFieldDecorator, getFieldsError, getFieldError, isFieldTouched, getFieldValue
+			getFieldDecorator,
+			getFieldsError,
+			getFieldError,
+			isFieldTouched
 		} = this.props.form;
 
 		const nameError = isFieldTouched('name') && getFieldError('name');
@@ -170,7 +173,7 @@ class SignupForm extends Component {
 								}],
                 valuePropName: 'checked',
               })(
-                <Checkbox>I have read the <Link to='/agreement'>agreement</Link></Checkbox>
+                <Checkbox>I have read and accept the <Link to='/agreement'>agreement</Link>.</Checkbox>
                 )}
             </FormItem>
 						<FormItem>
