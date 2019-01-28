@@ -173,7 +173,7 @@ class SignupForm extends Component {
 								}],
                 valuePropName: 'checked',
               })(
-                <Checkbox>I have read and accept the <Link to='/agreement'>agreement</Link>.</Checkbox>
+                <Checkbox>I have read and accept the <Link to='/agreement'>agreement.</Link></Checkbox>
                 )}
             </FormItem>
 						<FormItem>
