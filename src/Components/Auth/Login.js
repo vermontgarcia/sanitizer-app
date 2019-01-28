@@ -13,7 +13,15 @@ import {
 
 const FormItem = Form.Item;
 
+function hasErrors(fieldsError) {
+  return Object.keys(fieldsError).some(field => fieldsError[field]);
+}
+
 class LoginForm extends Component {
+
+	componentDidMount(){
+		this.props.form.validateFields();
+	}
 
 	handleSubmit = (e) => {
 		e.preventDefault();
@@ -26,7 +34,17 @@ class LoginForm extends Component {
 	}
 
 	render(){
-		const {getFieldDecorator} = this.props.form
+		const {
+			getFieldDecorator,
+			getFieldsError,
+			getFieldError,
+			isFieldTouched
+		} = this.props.form;
+
+		const userNameError = isFieldTouched('userName') && getFieldError('userName');
+		const passwordError = isFieldTouched('password') && getFieldError('password');
+
+
 		return (
 			<div className='login-envelop'>
 				<div>
@@ -38,7 +56,10 @@ class LoginForm extends Component {
 							<h1>Login</h1>
 						</div>
 						
-						<FormItem>
+						<FormItem
+							validateStatus={userNameError ? 'error' : ''}
+							help={userNameError || ''}
+						>
               {getFieldDecorator('userName', {
                 rules: [{ required: true, message: 'Type your username!' }],
               })(
@@ -47,7 +68,10 @@ class LoginForm extends Component {
                   placeholder='Username'/>
               )}
             </FormItem>
-						<FormItem>
+						<FormItem
+							validateStatus={passwordError ? 'error' : ''}
+							help={passwordError || ''}
+						>
 							{getFieldDecorator('password', {
 								rules: [{ required: true, message: 'Type your password!'}],
 							})(
@@ -65,8 +89,12 @@ class LoginForm extends Component {
               })(
                 <Checkbox>Remember me</Checkbox>
 								)}
-								<Link className='login-form-forgot' to='/forgot'>Forgot password</Link>
-							<Button type='primary' htmlType='submit' className='login-form-button'>
+								<Link className='login-form-forgot' to='/forgot'>Forgot password</Link>.
+							<Button
+								type='primary'
+								htmlType='submit'
+								className='login-form-button'
+								disabled={hasErrors(getFieldsError())}>
 								Login
 							</Button>
 							Or <Link to='/signup'>register now!</Link>
