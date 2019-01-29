@@ -88,7 +88,7 @@ class SignupForm extends Component {
 		return (
 			<div className='signup-envelop'>
 				<div>
-					<img className='prosa-logo' src='https://www.prosamexico.mx/images/logo.png' alt='PROSA logo' />
+					<img className='prosa-logo' src='logo.png' alt='PROSA logo' />
 				</div>
 				<div>
 					<Form onSubmit={this.handleSubmit} className='form-envelop'>
