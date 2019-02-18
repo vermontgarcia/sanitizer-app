@@ -29,3 +29,11 @@
 .container{
   padding: 25px;
 }
+
+.hide{
+  display: none;
+}
+
+.input-file:hover{
+  cursor: pointer;
+}

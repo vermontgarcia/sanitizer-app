@@ -43,9 +43,45 @@ function handleFileReader(event){
 
 class Home extends Component {
 
-	handleFile = (e) => {
-		const content = 'hello'//fileReader.result;
-		console.log('file content', content)
+	handleDropFile = (event) => {
+
+		console.log('dropping file...')
+
+    event.preventDefault();
+		event.stopPropagation();
+
+		let dropZone = document.getElementById('drop-zone');
+		dropZone.setAttribute('class', 'ant-upload ant-upload-drag')
+
+    var files = event.dataTransfer.files; // FileList object.
+		console.log('Files ',files);
+		
+		this.handleChangeFile(files[0]);
+
+		//const content = 'hello'//fileReader.result;
+		//console.log('file content', content)
+	}
+
+	handleDragOver = (event) => {
+
+		event.preventDefault();
+		event.stopPropagation();
+		//event.dataTransfer.dropEffect = 'Process file'; // Explicitly show this is a copy.
+
+		let dropZone = document.getElementById('drop-zone');
+		console.log('DragOver')
+		dropZone.setAttribute('class', 'ant-upload ant-upload-drag ant-upload-drag-hover')
+	}
+
+	handleDragOverExit = (event) => {
+
+		event.preventDefault();
+		event.stopPropagation();
+
+		console.log('Leaving...')
+
+		let dropZone = document.getElementById('drop-zone');
+		dropZone.setAttribute('class', 'ant-upload ant-upload-drag')
 	}
 
 	handleChangeFile = (file) => {
@@ -58,7 +94,7 @@ class Home extends Component {
 		fileData.readAsArrayBuffer(file);
 		fileData.onload = (function(){
 			return function (){
-				console.log('Result 2', fileData.result)
+				console.log('Result', fileData.result)
 			}
 		})(file)
 		//console.log('Result 1', fileData.result)
@@ -76,16 +112,23 @@ class Home extends Component {
 		} else {
 			message.error('The File APIs are not fully supported in this browser.');
 		}
-
-
 	}
 	
+	componentDidMount(){
+		var dropZone = document.getElementById('drop-zone');
+		console.log('Drop Zone', dropZone)
+		dropZone.addEventListener('dragover', this.handleDragOver, false);
+		dropZone.addEventListener('dragleave', this.handleDragOverExit);
+		dropZone.addEventListener('drop', this.handleDropFile, false);
+		
+	}
 	
 
 	render(){
 		return (
 			<div>
 				<h1>Sanitizer</h1>
+				{/*
 				<div className='container'>
 					<Dragger {...props}>
 						<p className="ant-upload-drag-icon">
@@ -95,9 +138,27 @@ class Home extends Component {
 						<p className="ant-upload-hint">Support for a single or bulk upload.</p>				
 					</Dragger>
 				</div>
+				*/}
 				<div className='container'>
-					<input type='file' onChange={ (e) => 
-						this.handleChangeFile(e.target.files[0])} />
+					<span >
+						<div id='drop-zone'className='ant-upload ant-upload-drag'>
+							<span className='ant-upload ant-upload-btn' role='button'>
+								<label htmlFor='input-file' className='input-file' role='button'>
+									<input
+										id='input-file'
+										type='file'
+										className='hide'
+										onChange={ (e) => 
+											this.handleChangeFile(e.target.files[0])} />
+									<p className='ant-upload-drag-icon'>
+										<Icon type='inbox' />
+									</p>
+									<p className="ant-upload-text">Click or drag file to this area</p>
+									<p className="ant-upload-hint">Support for a single upload.</p>
+								</label>
+							</span>
+						</div>
+					</span>
 				</div>
 				<Button type='primary'>Export to Excel</Button>
 			</div>
