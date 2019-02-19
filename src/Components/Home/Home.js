@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {isLoggedIn} from '../../authService';
+import {hexDump} from '../../service';
 
 import {
 	Button,
@@ -9,6 +10,8 @@ import {
 } from 'antd';
 
 const Dragger = Upload.Dragger;
+
+/*
 
 const props = {
 	name: 'file',
@@ -27,7 +30,6 @@ const props = {
   }, 
 };
 
-
 function handleFileReader(event){
 		console.log('Reading file....')
 		message.success('Reading file...')
@@ -40,8 +42,17 @@ function handleFileReader(event){
     console.log('Files ',files);
 
 	}
+*/
 
 class Home extends Component {
+
+	constructor (){
+		super();
+		this.state = {
+			file: {},
+			hexDataFile: '',
+		};
+	}
 
 	handleDropFile = (event) => {
 
@@ -58,15 +69,12 @@ class Home extends Component {
 		
 		this.handleChangeFile(files[0]);
 
-		//const content = 'hello'//fileReader.result;
-		//console.log('file content', content)
 	}
 
 	handleDragOver = (event) => {
 
 		event.preventDefault();
 		event.stopPropagation();
-		//event.dataTransfer.dropEffect = 'Process file'; // Explicitly show this is a copy.
 
 		let dropZone = document.getElementById('drop-zone');
 		console.log('DragOver')
@@ -85,6 +93,8 @@ class Home extends Component {
 	}
 
 	handleChangeFile = (file) => {
+		//let fileName = file.name;
+		this.setState({file})
 		//console.log('File', file)
 		//console.log('File Change')
 		let fileData = new FileReader();
@@ -92,12 +102,11 @@ class Home extends Component {
 		//console.log('File Data', fileData)
 		//fileData.onloadend = console.log('Loaded!');
 		fileData.readAsArrayBuffer(file);
-		fileData.onload = (function(){
-			return function (){
-				console.log('Result', fileData.result)
-			}
-		})(file)
-		//console.log('Result 1', fileData.result)
+		fileData.onloadend = () => {
+			let hexDataFile = hexDump(fileData.result)
+			this.setState({hexDataFile})
+			console.log('Hex Dump loadEnd', hexDataFile)
+		}
 	}
 
 	componentWillMount(){
@@ -125,6 +134,12 @@ class Home extends Component {
 	
 
 	render(){
+
+		const {
+			file,
+			hexDataFile
+		} = this.state;
+
 		return (
 			<div>
 				<h1>Sanitizer</h1>
@@ -160,7 +175,13 @@ class Home extends Component {
 						</div>
 					</span>
 				</div>
-				<Button type='primary'>Export to Excel</Button>
+				<div className='container'>
+					{file.name !== undefined ? <p><strong>{file.name}</strong>{` - ${file.type} - ${file.size} bytes`}</p> : null}
+				</div>
+				<div className='container result'>
+					<p>{hexDataFile}</p>
+				</div>
+				{file.name !== undefined ? <Button type='primary'>Export to Excel</Button> : null}
 			</div>
 		)
 	}

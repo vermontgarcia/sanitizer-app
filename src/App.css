@@ -28,6 +28,12 @@
 
 .container{
   padding: 25px;
+  overflow-wrap: break-word;
+}
+
+.result{
+  text-align: left;
+  font-family: 'Courier New', Courier, monospace;
 }
 
 .hide{
