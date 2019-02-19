@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import {isLoggedIn} from '../../authService';
-import {hexDump} from '../../service';
-
+import {
+	hexDump,
+	proccessFile
+} from '../../service';
 import {
 	Button,
 	message,
 	Upload,
-	Icon
+	Icon,
+	Skeleton,
+	Table,
 } from 'antd';
 
 const Dragger = Upload.Dragger;
@@ -51,12 +55,22 @@ class Home extends Component {
 		this.state = {
 			file: {},
 			hexDataFile: '',
+			data: [],
+			table: {
+        bordered: false,
+        pagination: true,
+        size: 'small',
+        title: undefined,
+        showHeader: true,
+        scroll: undefined,
+        hasData: true,
+      }
 		};
 	}
 
 	handleDropFile = (event) => {
 
-		console.log('dropping file...')
+		//console.log('dropping file...')
 
     event.preventDefault();
 		event.stopPropagation();
@@ -65,9 +79,9 @@ class Home extends Component {
 		dropZone.setAttribute('class', 'ant-upload ant-upload-drag')
 
     var files = event.dataTransfer.files; // FileList object.
-		console.log('Files ',files);
+		//console.log('Files ',files);
 		
-		this.handleChangeFile(files[0]);
+		this.handleLoadFile(files[0]);
 
 	}
 
@@ -77,7 +91,7 @@ class Home extends Component {
 		event.stopPropagation();
 
 		let dropZone = document.getElementById('drop-zone');
-		console.log('DragOver')
+		//console.log('DragOver')
 		dropZone.setAttribute('class', 'ant-upload ant-upload-drag ant-upload-drag-hover')
 	}
 
@@ -86,26 +100,25 @@ class Home extends Component {
 		event.preventDefault();
 		event.stopPropagation();
 
-		console.log('Leaving...')
+		//console.log('Leaving...')
 
 		let dropZone = document.getElementById('drop-zone');
 		dropZone.setAttribute('class', 'ant-upload ant-upload-drag')
 	}
 
-	handleChangeFile = (file) => {
-		//let fileName = file.name;
+	handleLoadFile = (file) => {
 		this.setState({file})
-		//console.log('File', file)
-		//console.log('File Change')
 		let fileData = new FileReader();
 
-		//console.log('File Data', fileData)
-		//fileData.onloadend = console.log('Loaded!');
 		fileData.readAsArrayBuffer(file);
 		fileData.onloadend = () => {
 			let hexDataFile = hexDump(fileData.result)
 			this.setState({hexDataFile})
 			console.log('Hex Dump loadEnd', hexDataFile)
+
+			let data = proccessFile(hexDataFile);
+			this.setState({data});
+
 		}
 	}
 
@@ -135,9 +148,30 @@ class Home extends Component {
 
 	render(){
 
+		const columns = [{
+			title: 'Message',
+			dataIndex: 'message',
+			align: 'center'
+		},{
+      title: 'HexStream',
+			dataIndex: 'hexStream',
+			width: '300',
+			className: 'result',
+    },{
+			title: 'Source',
+			dataIndex: 'source',
+			align: 'center',
+		},{
+			title: 'Destination',
+			dataIndex: 'destination',
+			align: 'center',
+		}];
+
 		const {
 			file,
-			hexDataFile
+			hexDataFile,
+			data,
+
 		} = this.state;
 
 		return (
@@ -164,7 +198,7 @@ class Home extends Component {
 										type='file'
 										className='hide'
 										onChange={ (e) => 
-											this.handleChangeFile(e.target.files[0])} />
+											this.handleLoadFile(e.target.files[0])} />
 									<p className='ant-upload-drag-icon'>
 										<Icon type='inbox' />
 									</p>
@@ -179,7 +213,7 @@ class Home extends Component {
 					{file.name !== undefined ? <p><strong>{file.name}</strong>{` - ${file.type} - ${file.size} bytes`}</p> : null}
 				</div>
 				<div className='container result'>
-					<p>{hexDataFile}</p>
+					{data[0] !== undefined ? <Table {...this.state.table} columns={columns} dataSource={this.state.data} onChange={this.onChange} /> : null}
 				</div>
 				{file.name !== undefined ? <Button type='primary'>Export to Excel</Button> : null}
 			</div>
