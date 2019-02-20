@@ -36,6 +36,16 @@
   overflow-wrap: break-word;
 }
 
+.itemResult{
+  width: 10vw
+}
+
+.hexResult{
+  overflow-wrap: break-word;
+  width: 85vw;
+  text-align: left;
+}
+
 .hide{
   display: none;
 }

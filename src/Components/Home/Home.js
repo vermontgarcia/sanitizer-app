@@ -124,10 +124,10 @@ class Home extends Component {
 
 	componentWillMount(){
 
-		/*
+		///*
     const token = localStorage.getItem('token');
 		token ? isLoggedIn(this.props.history) : this.props.history.push('/login');
-		*/
+		//*/
 
 		if (window.File && window.FileReader && window.FileList && window.Blob) {
 			console.log('All File APIs supported')
@@ -144,6 +144,13 @@ class Home extends Component {
 		dropZone.addEventListener('drop', this.handleDropFile, false);
 		
 	}
+
+	componentDidUpdate(){
+		///*
+    const token = localStorage.getItem('token');
+		token ? isLoggedIn(this.props.history) : this.props.history.push('/login');
+		//*/
+	}
 	
 
 	render(){
@@ -151,20 +158,27 @@ class Home extends Component {
 		const columns = [{
 			title: 'Message',
 			dataIndex: 'message',
-			align: 'center'
+			align: 'center',
+			className: 'itemResult'
 		},{
       title: 'HexStream',
 			dataIndex: 'hexStream',
-			width: '300',
-			className: 'result',
+			align: 'center',
+			render: (text, record) => (
+				<span>
+					<p className='hexResult'>{record.hexStream}</p>
+				</span>
+			),
     },{
 			title: 'Source',
 			dataIndex: 'source',
 			align: 'center',
+			className: 'hide',
 		},{
 			title: 'Destination',
 			dataIndex: 'destination',
 			align: 'center',
+			className: 'hide',
 		}];
 
 		const {
@@ -215,7 +229,12 @@ class Home extends Component {
 				<div className='container result'>
 					{data[0] !== undefined ? <Table {...this.state.table} columns={columns} dataSource={this.state.data} onChange={this.onChange} /> : null}
 				</div>
-				{file.name !== undefined ? <Button type='primary'>Export to Excel</Button> : null}
+
+				{/*
+				<div>
+					{file.name !== undefined ? <Button type='primary'>Export to Excel</Button> : null}
+				</div>
+				*/}
 			</div>
 		)
 	}

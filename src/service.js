@@ -124,6 +124,9 @@ function mBreakDown (mBitMap,item){
 	let message = {};
 	message.message = item;
 	message.hexStream = cleanHexStream;
+	message.source = '255.255.255.255';
+	message.destination = '255.255.255.255';
+	message.key = item;
 	data.push(message)
 
 	console.log ('write message', data)
@@ -570,6 +573,7 @@ export const hexDump = (buf) => {
 export const proccessFile = (hdf) => {
 
 	data = [];
+	pointer = 0;
 	hexDataFile = hdf
 
 	//Header of the file
