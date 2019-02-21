@@ -146,7 +146,7 @@ class Home extends Component {
 										<Icon type='inbox' />
 									</p>
 									<p className="ant-upload-text">Click or drag file to this area</p>
-									<p className="ant-upload-hint">Support for a single file proccesing.</p>
+									<p className="ant-upload-hint">Support for a single file processing.</p>
 								</label>
 							</span>
 						</div>
