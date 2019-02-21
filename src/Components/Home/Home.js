@@ -83,11 +83,9 @@ class Home extends Component {
 	
 	componentDidMount(){
 		var dropZone = document.getElementById('drop-zone');
-		console.log('Drop Zone', dropZone)
 		dropZone.addEventListener('dragover', this.handleDragOver, false);
 		dropZone.addEventListener('dragleave', this.handleDragOverExit);
 		dropZone.addEventListener('drop', this.handleDropFile, false);
-		
 	}
 
 	componentDidUpdate(){
@@ -95,7 +93,6 @@ class Home extends Component {
 		token ? isLoggedIn(this.props.history) : this.props.history.push('/login');
 	}
 	
-
 	render(){
 
 		const columns = [{

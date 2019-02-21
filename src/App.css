@@ -37,12 +37,12 @@
 }
 
 .itemResult{
-  width: 10vw
+  width: 10%
 }
 
 .hexResult{
   overflow-wrap: break-word;
-  width: 85vw;
+  width: 85%;
   text-align: left;
 }
 
