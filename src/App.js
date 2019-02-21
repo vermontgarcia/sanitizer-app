@@ -1,9 +1,6 @@
 import React, {Component} from 'react';
 import Router from './Router';
-
 import {withRouter} from 'react-router-dom';
-
-//import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {

@@ -6,8 +6,6 @@ const base_url = window.location.hostname === 'localhost' ? 'http://localhost:35
 export const signup = (user, history) => {
 	axios.post(`${base_url}/auth/signup`, user)
 		.then(res => {
-			//localStorage.setItem('token', res.data.token);
-			//localStorage.setItem('user', JSON.stringify(res.data.user));
 			message.success(res.data.msg);
 			history.push('/')
 		})
