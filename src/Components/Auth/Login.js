@@ -27,7 +27,6 @@ class LoginForm extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				console.log('Received values of form: ', values);
 				login(values, this.props.history);
 			}
 		});
@@ -40,11 +39,8 @@ class LoginForm extends Component {
 			getFieldError,
 			isFieldTouched
 		} = this.props.form;
-
 		const userNameError = isFieldTouched('userName') && getFieldError('userName');
 		const passwordError = isFieldTouched('password') && getFieldError('password');
-
-
 		return (
 			<div className='login-envelop'>
 				<div>
@@ -55,7 +51,6 @@ class LoginForm extends Component {
 						<div>
 							<h1>Login</h1>
 						</div>
-						
 						<FormItem
 							validateStatus={userNameError ? 'error' : ''}
 							help={userNameError || ''}
@@ -81,7 +76,6 @@ class LoginForm extends Component {
 									placeholder='Password' />
 							)}
 						</FormItem>
-
             <FormItem>
               {getFieldDecorator('remember', {
                 valuePropName: 'checked',

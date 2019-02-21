@@ -35,7 +35,6 @@ class SignupForm extends Component {
 		e.preventDefault();
 		this.props.form.validateFields((err, values) => {
 			if (!err) {
-				//console.log('Received values of form: ', values);
 				signup(values, this.props.history);
 			}
 		});
@@ -64,7 +63,6 @@ class SignupForm extends Component {
 	}
 	
 	validateCheckedAgreement = (rule, value, callback) => {
-		//const form = this.props.form;
 		if(value === false){
 			callback('Please confirm the agreement!');
 		}
@@ -186,7 +184,6 @@ class SignupForm extends Component {
 							</Button>
 							Already have an account? <Link to='/login' >Login</Link>
 						</FormItem>				
-					
 					</Form>
 				</div>
 			</div>

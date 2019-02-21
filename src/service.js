@@ -1,6 +1,5 @@
 //Auxiliar Variables
 
-//let reader;
 let data = [];
 var hexDataFile;
 let cleanHexStream = '';
@@ -31,6 +30,7 @@ let hexStreamIni = 0;
 let name;
 
 //Conversion functions
+
 function pad(n, width, z = '0') {
 	return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
 }
@@ -81,7 +81,6 @@ function mBreakDown (mBitMap,item){
 		if(mBitMap[i]==='1'){
 			let deLong = dataElementProcess(i+1);
 			acc += deLong;
-			//console.log(i+1,deLong,acc);
 		}
 	}
 
@@ -94,8 +93,6 @@ function mBreakDown (mBitMap,item){
 
 	//Searching for 2 possition tail and in case update pointer
 
-	//let long1 = hexDataFile.slice(pointer+2+16 +8,pointer+2+24 +4); /// For 248 + 88 headers
-	//let long2 = hexDataFile.slice(pointer+2+24 +4 ,pointer+2+32); /// For 248 + 88 headers
 	let long1 = hexDataFile.slice(pointer+2+16, pointer+2+24);
 	let long2 = hexDataFile.slice(pointer+2+24 ,pointer+2+32);
 	if (long1 === long2){
@@ -103,19 +100,13 @@ function mBreakDown (mBitMap,item){
 		cleanHexStream += hexDataFile.slice(pointer,pointer+2);
 		pointer += 2;
 		console.log(pointer);
-		//pointer += 32;
-		//console.log(pointer);
 	} else{
 		console.log('Not equal, testing back possition....')
-		//long1 = hexDataFile.slice(pointer+16 +8 ,pointer+24 +4); /// For 248 + 88 headers
-		//long2 = hexDataFile.slice(pointer+24 +4 ,pointer+32); /// For 248 + 88 headers
 		long1 = hexDataFile.slice(pointer+16 ,pointer+24);
 		long2 = hexDataFile.slice(pointer+24 ,pointer+32);
 		if (long1 === long2){
 			console.log('Equal, continuing the proccess...');
 			console.log(pointer);
-			// pointer += 32;
-			// console.log(pointer);
 		}
 	} 
 
@@ -130,9 +121,6 @@ function mBreakDown (mBitMap,item){
 	data.push(message)
 
 	console.log ('write message', data)
-	//writeMessage(item,cleanHexStream);
-	//cleanHexStream='';
-	//pointer+=32;
 	pointer+=transportHeaderLong;
 	return acc;
 }
@@ -141,10 +129,8 @@ function variableLenght(deLongitud,de){
 	let longitud;
 	let hex = hexDataFile.slice(pointer,pointer+deLongitud);
 	cleanHexStream += hex;
-	//console.log('Long DE-'+de+': ', hex);
 	console.log('Long DE-'+de+': ', hex2Ascii(hex));
 	let deLong = parseInt(hex2Ascii(hex));
-	//console.log(deLong);
 	pointer += deLongitud;
 	longitud = deLong*2;
 	staticLenght(longitud,de);
@@ -169,19 +155,14 @@ function staticLenght(longitud,de){
 	} else if (de === 63 || de === 126){
 		let index = 0;
 		index = hex.indexOf(tokenC0String,index);
-		//console.log('index ', index)
 		if (index >-1){
 			index += tokenC0String.length;
-			//console.log('index ', index)
 			let string = hex.slice(index,index+6);
-			//console.log('string ', string)
 			if (!(string.includes('20')||string.includes('58'))){
 				hex = hex.replace(string,'2a2a2a');
-				//console.log('hex ', hex)
 			}
 		}
 	}
-	//console.log('DE-'+de+': ',hex);
 	cleanHexStream += hex;
 	console.log('DE-'+de+': ',hex2Ascii(hex));
 	pointer += longitud;
@@ -588,52 +569,36 @@ export const proccessFile = (hdf) => {
 	console.log(indexISOMessages);
 
 	//Processing Messages
-
 	for(let i = 0; i < indexISOMessages.length; i++){
 
 		binBitMap='';
 
 		console.log('************************** MESSAGE '+ (i+1) +' **************************')
 
-		//console.log(cleanHexStream);
 		cleanHexStream = '';
-
-		//console.log(pointer);
-
 		cleanHexStream += hexDataFile.slice(pointer,indexISOMessages[i]);
-
 		isoHeader[i] = hexDataFile.slice(indexISOMessages[i],indexISOMessages[i]+isoHeaderLong);
-
 		cleanHexStream += isoHeader[i];
-
 		console.log(hex2Ascii(isoHeader[i]));
+
 		//Primary bit map
 		pointer = indexISOMessages[i]+isoHeaderLong;
 		hexPrimaryBitMap = hexDataFile.slice(pointer,pointer+hexPrimaryBitMapLong);
 		pointer += hexPrimaryBitMap.length;
 		cleanHexStream += hexPrimaryBitMap;
 
-
 		ascciPrimaryBitMap = hex2Ascii(hexPrimaryBitMap);
 		binPrimaryBitMap = hex2bin(ascciPrimaryBitMap);
 		binBitMap += binPrimaryBitMap;
-		//console.log(hexPrimaryBitMap);
-		//console.log(ascciPrimaryBitMap);
-		//console.log(binPrimaryBitMap);
 
 		//Seundary bit map if any
 		if (binPrimaryBitMap[0]==='1'){
-			//console.log('Entrando....')
 			secBitMap = true;
 			hexSecundaryBitMap = hexDataFile.slice(pointer,pointer+hexSecundaryBitMapLong);
-			//cleanHexStream += hexSecundaryBitMap;
 			ascciSecundaryBitMap = hex2Ascii(hexSecundaryBitMap);
 			binSecundaryBitMap = hex2bin(ascciSecundaryBitMap);
 			binBitMap += binSecundaryBitMap;
-			//console.log(hexSecundaryBitMap);
-			//console.log(ascciSecundaryBitMap);
 		} else {
-			//console.log('No entrando....')
 			secBitMap = false;
 		}
 		//identifying DE35
